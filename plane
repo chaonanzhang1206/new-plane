@@ -1,0 +1,54 @@
+package plane;
+
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
+
+public class Plane{
+
+BufferedImage image;
+int x,y;
+int width,heigth;
+int size;
+
+double g;
+double t;
+double v0;
+double speed;
+double s;
+double alpha;
+
+public Plane() throws Exception{
+image = ImageIO.read(getClass().getResource("plane.png"));
+width = image.getWidth();
+heigth = image.getHeight();
+x = 132;
+y = 280;
+size = 40;
+
+g=4; 
+v0=20;  
+t=0.25;  
+speed= v0;   
+s=0; 
+alpha=0;  
+}
+
+public void step(){
+double v0=speed;
+s=v0*t+g*t*t/2;
+y=y-(int)s;
+double v = v0-g*t;
+speed=v;
+}
+
+public void flappy(){
+speed=v0;
+}
+
+public boolean hit(Ground ground){
+
+}
+public boolean hit(Column column){
+
+}
