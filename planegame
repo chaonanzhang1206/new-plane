@@ -1,0 +1,119 @@
+package plane;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Random;
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+
+public class PlaneGame extends JPanel {
+Plane plane;
+
+BufferedImage background;
+int score;
+int state;
+public static final int START = 0;
+public static final int RUNNING = 1;
+public static final int GAME_OVER=2;
+BufferedImage startImage;
+BufferedImage gameOverImage; 
+
+public PlaneGame() throws Exception{
+state =START;
+startImage = ImageIO.read(getClass().getResource("start.png"));
+gameOverImage=ImageIO.read(getClass().getResource("gameover.png"));
+score=0;
+plane = new Plane();
+background = ImageIO.read(getClass().getResource("bg.png"));
+}
+
+public void paint(Graphics g){ 
+	g.drawImage(background,0,0,null);
+g.drawImage(plane.image, plane.x-plane.width/2,plane.y-plane.heigth/2,null);
+Font f = new Font(Font.SANS_SERIF,Font.BOLD,20);
+g.setColor(Color.WHITE);
+g.setFont(f);
+g.drawString("score："+score,20,50);
+
+switch (state) {
+case START:
+g.drawImage(startImage,0,0,null);
+break;
+case GAME_OVER:
+g.drawImage(gameOverImage,0,0,null);
+break;
+}
+
+}
+
+public static void main(String[] args) throws Exception {
+JFrame frame = new JFrame();
+PlaneGame game = new PlaneGame();
+frame.add(game);
+frame.setSize(440,670);
+frame.setLocationRelativeTo(null);
+frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+frame.setVisible(true);
+
+game.action();
+}
+
+
+public void  action() throws Exception{ 
+MouseAdapter l = new MouseAdapter(){ 
+public void mousePressed(MouseEvent e){ 
+plane.flappy();
+try{
+switch (state) {
+case GAME_OVER:
+plane = new Plane();
+score = 0;
+state=START;
+break;
+case START:
+state=RUNNING;
+case RUNNING:
+plane.flappy();
+}
+}catch(Exception ex){
+ex.printStackTrace();
+}
+}
+};
+addMouseListener(l);
+
+while(true){
+
+switch (state) {
+case START:
+
+break;
+case RUNNING:
+plane.step();
+
+if(){
+score++;
+}
+if () {
+state = GAME_OVER;
+}
+break;
+}
+
+repaint();
+Thread.sleep(1000/80);
+}
+}
+
+}
